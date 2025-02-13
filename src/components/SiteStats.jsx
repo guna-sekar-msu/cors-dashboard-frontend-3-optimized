@@ -14,7 +14,7 @@ const SiteStats = ({ setSelectedLayer, setCoordinates, setSelectedDateInParent }
     "Static JSON + STACOV File": new Date("2024-04-15"),
     "Over All Site Info": null, // No date filter shown for this option
     "Over All Vs MYCS2": new Date("2010-01-02"),
-    "OPUSNET Data": new Date("2018-10-27"),
+    "OPUSNET Data": new Date("2018-10-28"),
   };
   // Handle dropdown selection
   const handleSelect = (option) => {

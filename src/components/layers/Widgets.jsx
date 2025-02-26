@@ -21,6 +21,7 @@ import { useGeojson } from "../../context/GeojsonProvider"; // Import Context
 import Graphic from '@arcgis/core/Graphic';
 import Point from '@arcgis/core/geometry/Point';
 import "../../../src/Style.css"
+import SnappingControls from "@arcgis/core/widgets/support/SnappingControls";
 
 const Widgets = ({ view,is3D,blobUrl }) => {
   const widgetsRef = useRef({
@@ -60,6 +61,34 @@ const Widgets = ({ view,is3D,blobUrl }) => {
 
     view.when(() => {
       if (view.ui) {
+        if (!widgetsRef.current.snappingExpand) {
+          const sketchVM = new SketchViewModel({
+            view: viewRef.current,
+            layer: markerLayer.current,
+          });
+        
+          // Add SnappingControls to handle snapping
+          const snappingControls = new SnappingControls({
+            view: viewRef.current,
+            snappingOptions: sketchVM.snappingOptions
+          });
+        
+          // Check if the snapping control already exists in the UI
+          if (!viewRef.current.ui.find("snapping-expand")) {
+            // Add the SnappingControls to an Expand widget to hide/show the widget
+            const snappingExpand = new Expand({
+              view: viewRef.current,
+              content: snappingControls,
+              expanded: false,
+              expandIcon: "configure",
+              expandTooltip: "Snapping Controls",
+              id: "snapping-expand" // ✅ Assign an ID for tracking
+            });
+        
+            viewRef.current.ui.add(snappingExpand, "bottom-left"); // Add to UI
+            widgetsRef.current.snappingExpand = snappingExpand; // Store reference
+          }
+        }
         // Add widgets if they haven't been added yet
         // if (!widgetsRef.current.search) {
         //   const searchWidget = new Search({ view });
